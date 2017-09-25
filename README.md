@@ -16,10 +16,10 @@ Describing geographic, demographic and economic information based on counties as
 <div style="text-align: center"><sub><b>Figure 4: </b> Histograms of area, population and population density </sub>
 
 ### Some useful references and resources
-Sources of the data used:
+####Sources of the data used:
 1. US Census Bureau: [https://www.census.gov](https://www.census.gov/)
 2. American Community Survey (ACS): [https://www.census.gov/programs-surveys/acs/](https://www.census.gov/programs-surveys/acs/)
 
-Useful articles:
-3. [Source by OpenNews: <b><i>How to Use the Census Bureau’s American Community Survey like a Pro</i></b>](https://source.opennews.org/articles/how-use-census-bureau-american-community-survey/)<br>by Paul Overberg
-4. [TrendCT.org: <b><i>Tutorial: How to understand and retrieve Census data — for beginners</i></b>](https://trendct.org/2015/08/14/tutorial-how-to-understand-and-retrieve-census-data-for-beginners/)<br> by Alvin Chang
+####Useful articles:
+1. [Source by OpenNews: <b><i>How to Use the Census Bureau’s American Community Survey like a Pro</i></b>](https://source.opennews.org/articles/how-use-census-bureau-american-community-survey/)<br>by Paul Overberg
+2. [TrendCT.org: <b><i>Tutorial: How to understand and retrieve Census data — for beginners</i></b>](https://trendct.org/2015/08/14/tutorial-how-to-understand-and-retrieve-census-data-for-beginners/)<br> by Alvin Chang
