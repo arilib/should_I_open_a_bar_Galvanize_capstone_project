@@ -32,7 +32,7 @@ Another scatter plot is shown in figure 3.
 
 <img alt="Histograms of county areas, populations and hotels" src="figures/area_pop_hotels_scatters.png" width='1000'>
 <div style="text-align: center"><sub><b>Figure 3: </b> Histograms of area, population and hotels </sub>
-###State of the project
+### State of the project
 
 I have a csv file with a simplified dataset
 I have a model running that rather poorly models the number of bars
@@ -43,10 +43,10 @@ I have a 1970 style interface that can interact with the user.
 
 ### List of things to do
 
-####Website
+#### Website
 everything
 
-####readme.md file
+#### Readme.md file
 Write it again, more interestingly and more complete (explain more about the data selection)
 
 #### features
