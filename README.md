@@ -17,13 +17,46 @@ Using geographic, demographic and economic information at the county level to tr
 
 
 <img alt="Histograms of county areas, populations and population densities" src="figures/area_pop_dens_hist.png" width='500'>
-<div style="text-align: center"><sub><b>Figure 4: </b> Histograms of area, population and population density </sub>
+<div style="text-align: center"><sub><b>Figure 1: </b> Histograms of area, population and population density </sub>
 
 An initial analysis of whether is okay to use population, county area, and population density. As it can be seen in the right-most scatter plot of figure 2, the population and the population density are quite correlated.  
 
 
 <img alt="Histograms of county areas, populations and population densities" src="figures/area_pop_dens_scatters.png" width='500'>
-<div style="text-align: center"><sub><b>Figure 4: </b> Histograms of area, population and population density </sub>
+<div style="text-align: center"><sub><b>Figure 2: </b> Histograms of area, population and population density </sub>
+
+###State of the project
+
+I have a csv file with a simplified dataset
+I have a model running that rather poorly models the number of bars
+I have a 1970 style interface that can interact with the user.
+
+<img alt="Primitive interface showing a prediction of the model" src="figures/Screenshot from 2017-09-28 00-31-55.png" width='500'>
+<div style="text-align: center"><sub><b>Figure 3: </b> Primitive interface showing a prediction of the model </sub>
+
+### List of things to do
+
+####Website
+everything
+
+####readme.md file
+Write it again, more interestingly and more complete (explain more about the data selection)
+
+#### features
+At this stage of the project, the features being used to predict the number of bars in a particular county are:
+area
+population
+number of hotels
+
+Some other features to be soon added will be:
+median income
+switch population for population of drinking age
+#### model
+Talk to Adam and look into Brendan Drew's approach using python library PyMC3.
+
+
+
+
 
 ### Some useful references and resources
 #### Sources of the data used:
