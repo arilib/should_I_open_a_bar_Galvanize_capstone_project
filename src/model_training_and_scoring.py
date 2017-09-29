@@ -45,7 +45,7 @@ def store_model_info(county_info_df, model, cols):
     return
 
 if __name__ == '__main__':
-    filename = '../data/2015_toy_sd_1_5_nan_to_min.csv'
+    filename = '../data/2015_toy_sd_rnd_nan_to_min.csv'
     X_train, X_test, y_train, y_test, county_info_df, cols = split_data(filename)
     lr_model, lr_train_score, lr_test_score = lin_reg(X_train, X_test, y_train, y_test)
 

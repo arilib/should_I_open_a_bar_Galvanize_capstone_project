@@ -1,0 +1,64 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+
+  <title>DSI Text Classifier</title>
+
+  <meta name="description" content="The Galvanize DSI Text Classifier">
+  <meta name="author" content="DSI Instructor">
+
+  <script type="text/javascript"
+          src="{{ url_for('static', filename='jquery.js') }}">
+  </script>
+
+</head>
+
+<body>
+
+  <h1>Submit Your Text</h1>
+  <p>Paste your articles text into the input box below, and click the <span>Classify</span> button to predict your article's classification.</p>
+
+    <textarea id="article"></textarea>
+    <button id="classify">Classify</button>
+
+    <p><span>Your article is best classified as a: </span><span id="classification"></span>
+
+
+<script type="text/javascript">
+
+let get_article_text = function() {
+  return $("textarea#article").val();
+}
+
+let write_article_classification = function(classification) {
+  $("span#classification").text(classification);
+}
+
+let send_article_text = function() {
+  let article_text = get_article_text();
+  $.ajax({
+      url: "/predict",
+      type: "POST",
+      data: JSON.stringify({"article": article_text}),
+      contentType: "application/json",
+      success: function(data) {
+          console.log(data);
+          write_article_classification(data.prediction);
+      }
+  });
+}
+
+$(document).ready(function() {
+  $("button#classify").click(function() {
+    send_article_text();
+  });
+});
+
+</script>
+
+
+</body>
+</html>

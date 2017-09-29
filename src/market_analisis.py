@@ -4,11 +4,10 @@ import re
 import pickle
 
 def retr_model_info():
-    pkl_file = open('model_and_cols.pkl', 'rb')
-    county_info_df = pickle.load(pkl_file)
-    model = pickle.load(pkl_file)
-    cols = pickle.load(pkl_file)
-    pkl_file.close()
+    with open('model_and_cols.pkl', 'rb') as f:
+        county_info_df = pickle.load(f)
+        model = pickle.load(f)
+        cols = pickle.load(f)
     return(county_info_df, model, cols)
 
 def index_finder(county, state, df):
