@@ -9,13 +9,13 @@ Ariel Libertun</div><br>
 This project demonstrates one of the powers of data science. It uses a machine learning algorithm, trained with publicly available data produced by the US Census' American Community Survey program, to help answer a question that might be easier to ask than to respond.
 
 ## Table of Contents
-1. [Why this question?](#why this question?)
-2. [The Data](#the data)
-3. [Model and features](#model and features)
-4. [Some useful references and resources](#some useful references and resources)
-    * [Sources of the data used](#sources of the data used)
-    * [Useful articles](#useful articles)
-5. [Future Directions and refinements](#future directions and refinements)
+1. [Why this question?](#why-this-question?)
+2. [The Data](#the-data)
+3. [Model and features](#model-and-features)
+4. [Some useful references and resources](#some-useful-references-and-resources)
+    * [Sources of the data used](#sources-of-the-data-used)
+    * [Useful articles](#useful-articles)
+5. [Future Directions and refinements](#future-directions-and-refinements)
 
 ## Why this question?
 As much as I might be interested in opening a bar, the question is an excuse to show many points of the data science process. Bars belong to a class of business that require the physical presence of the customer and it is not really replaced by any sort of delivery or e-commerce alternative. As such, the number of bars that a particular market can support must be strongly dependent on local features, such as population, average income, etc.<br><br>
