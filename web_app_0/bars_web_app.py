@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import re
 from sklearn.ensemble import RandomForestRegressor
+import math
 
 app = Flask(__name__)
 
@@ -58,7 +59,7 @@ def predict_bars(idx, county_info_df, model, cols, percentile=95):
         preds.append(pred.predict(X)[0])
     err_down = (np.percentile(preds, (100 - percentile) / 2. ))
     err_up = (np.percentile(preds, 100 - (100 - percentile) / 2.))
-    return(min(0,int(y_pred)), min(0,math.ceil(err_down)), math.floor(err_up), int(y))
+    return(min(0,int(y_pred)), max(0,math.ceil(err_down)), math.floor(err_up), int(y))
 
 
 @app.route('/', methods=['GET'])
@@ -80,7 +81,7 @@ def word_counter():
     text2 = str(request.form['user_input2'])
     idx, req_county = index_finder(text2, text1, county_info_df)
     pred, low_numb, high_numb, actual = predict_bars(idx, county_info_df, model, cols)
-    page = 'In {0}, there are {2} bars (2015 numbers).<br><br>Our model indicates that the market there can support between {3} and {4} bars.'
+    page = 'There are {2} bars in {0} (2015 numbers).<br><br>Our model indicates that the market there can support between {3} and {4} bars.'
     return page.format(req_county, pred, actual, low_numb, high_numb)
 # def submit():
 #     '''Interactive page where people enter the state and county and get the advice about bars'''
