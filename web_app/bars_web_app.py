@@ -44,6 +44,17 @@ def predict_bars(idx, county_info_df, model, cols):
         y_pred = model.predict(X)[0]
         return(int(y_pred), int(y))
 
+# # the calculation of err_down and err_up are modified code obtained from http://blog.datadive.net/prediction-intervals-for-random-forests/
+# def predict_bars(idx, county_info_df, model, cols, percentile=95):
+#     X = np.asarray(county_info_df.iloc[idx][cols]).reshape(1,-1)
+#     y = county_info_df.iloc[idx]['bars']
+#     y_pred = model.predict(X)
+#     preds = []
+#     for pred in model.estimators_:
+#         preds.append(pred.predict(X)[0])
+#     err_down = (np.percentile(preds, (100 - percentile) / 2. ))
+#     err_up = (np.percentile(preds, 100 - (100 - percentile) / 2.))
+#     return(int(y_pred), math.ceil(err_down), math.floor(err_up), int(y))
 
 
 @app.route('/', methods=['GET'])

@@ -5,6 +5,7 @@ from collections import Counter
 import pandas as pd
 import numpy as np
 import re
+from sklearn.ensemble import RandomForestRegressor
 
 app = Flask(__name__)
 
@@ -41,17 +42,29 @@ def index_finder(county, state, df):
     index = state_df.index[state_df['county_name'] == req_county].tolist()[0]
     return(index, req_county)
 
-def predict_bars(idx, county_info_df, model, cols):
-        X = np.asarray(county_info_df.iloc[idx][cols]).reshape(1,-1)
-        y = county_info_df.iloc[idx]['bars']
-        y_pred = model.predict(X)[0]
-        return(int(y_pred), int(y))
+# def predict_bars(idx, county_info_df, model, cols):
+#         X = np.asarray(county_info_df.iloc[idx][cols]).reshape(1,-1)
+#         y = county_info_df.iloc[idx]['bars']
+#         y_pred = model.predict(X)[0]
+#         return(int(y_pred), int(y))
+
+# the calculation of err_down and err_up are modified code obtained from http://blog.datadive.net/prediction-intervals-for-random-forests/
+def predict_bars(idx, county_info_df, model, cols, percentile=95):
+    X = np.asarray(county_info_df.iloc[idx][cols]).reshape(1,-1)
+    y = county_info_df.iloc[idx]['bars']
+    y_pred = model.predict(X)
+    preds = []
+    for pred in model.estimators_:
+        preds.append(pred.predict(X)[0])
+    err_down = (np.percentile(preds, (100 - percentile) / 2. ))
+    err_up = (np.percentile(preds, 100 - (100 - percentile) / 2.))
+    return(min(0,int(y_pred)), min(0,math.ceil(err_down)), math.floor(err_up), int(y))
 
 
 @app.route('/', methods=['GET'])
 def index():
     page = "Should I open a bar?"
-    return '''
+    return '''Enter the state and the county you are interested in:
         <form action="/advice" method='POST' >
             <input type="text1" name="user_input" />
             <input type="text2" name="user_input2" />
@@ -66,9 +79,9 @@ def word_counter():
     text1 = str(request.form['user_input'])
     text2 = str(request.form['user_input2'])
     idx, req_county = index_finder(text2, text1, county_info_df)
-    pred, actual = predict_bars(idx, county_info_df, model, cols)
-    page = 'In {0}, there are {2} bars.<br><br>Our model indicates that there can be {1}'
-    return page.format(text2, pred, actual)
+    pred, low_numb, high_numb, actual = predict_bars(idx, county_info_df, model, cols)
+    page = 'In {0}, there are {2} bars (2015 numbers).<br><br>Our model indicates that the market there can support between {3} and {4} bars.'
+    return page.format(req_county, pred, actual, low_numb, high_numb)
 # def submit():
 #     '''Interactive page where people enter the state and county and get the advice about bars'''
 #     return render_template('form/submit.html')
