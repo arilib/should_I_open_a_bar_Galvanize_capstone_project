@@ -1,5 +1,5 @@
 
-# <div style="text-align: center">Should I Open a Bar There?</div>
+# <div style="text-align: center">Should I Open a Bar?</div>
 <div style="text-align: right"> Capstone project, Denver Cohort 8<br>
 Ariel Libertun</div><br>
 
