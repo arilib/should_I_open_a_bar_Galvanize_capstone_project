@@ -97,7 +97,9 @@ if __name__ == '__main__':
     all_merged_df['log_bars'] = np.log10(all_merged_df['bars'])
     all_merged_df['log_hotels'] = np.log10(all_merged_df['hotels'])
 
-    all_merged_df_toy = all_merged_df[['geo_id', 'state_name', 'state_code', 'county_name', 'area_sqmi', 'pop_est_2015', 'hotels', 'bars', 'log_hotels', 'log_bars']]
+    all_merged_df_lin = all_merged_df[['geo_id', 'state_name', 'state_code', 'county_name', 'area_sqmi', 'pop_est_2015', 'hotels', 'bars']]
+
+    all_merged_df_log = all_merged_df[['geo_id', 'state_name', 'state_code', 'county_name', 'log_area_sqmi', 'log_pop_est_2015', 'log_hotels', 'bars']]
 
     # Saves the dataframe as a csv with all cols as a checkpoint
     sorted_df.to_csv('../data/2015_demo_geo.csv')
@@ -105,5 +107,8 @@ if __name__ == '__main__':
     hot_bar_df.to_csv('../data/2015_hot_bar_nofill.csv')
 
     all_merged_df.to_csv('../data/2015_master_sd_rnd_nan_to_min.csv')
-
-    all_merged_df_toy.to_csv('../data/2015_toy_sd_rnd_nan_to_min.csv')
+    print(all_merged_df.columns)
+    all_merged_df_lin.to_csv('../data/2015_lin_sd_rnd_nan_to_min.csv')
+    print(all_merged_df_lin.columns)
+    all_merged_df_lin.to_csv('../data/2015_log_sd_rnd_nan_to_min.csv')
+    print(all_merged_df_log.columns)
