@@ -101,5 +101,5 @@ if __name__ == '__main__':
     county_info_df, model, cols = retr_model_info()
     states = county_info_df.state_name.unique()
     state_list = [(idx, states[idx]) for idx in range(len(states))]
-    app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
+    app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
 
