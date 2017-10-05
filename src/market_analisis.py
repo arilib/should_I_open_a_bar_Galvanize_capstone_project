@@ -3,7 +3,6 @@ import numpy as np
 import re
 import pickle
 import math
-from sklearn.ensemble import RandomForestRegressor
 
 def retr_model_info():
     with open('model_and_cols.pkl', 'rb') as f:
@@ -34,15 +33,8 @@ def index_finder(county, state, df):
     index = state_df.index[state_df['county_name'] == req_county].tolist()[0]
     return(index, req_county)
 
-<<<<<<< HEAD
+
 # the calculation of err_down and err_up are modified code obtained from http://blog.datadive.net/prediction-intervals-for-random-forests/
-=======
-# def predict_bars(idx, county_info_df, model, cols):
-#     X = np.asarray(county_info_df.iloc[idx][cols]).reshape(1,-1)
-#     y = county_info_df.iloc[idx]['bars']
-#     y_pred = model.predict(X)[0]
-#     return(int(y_pred), int(y))
->>>>>>> cv
 def predict_bars(idx, county_info_df, model, cols, percentile=95):
     X = np.asarray(county_info_df.iloc[idx][cols]).reshape(1,-1)
     y = county_info_df.iloc[idx]['bars']

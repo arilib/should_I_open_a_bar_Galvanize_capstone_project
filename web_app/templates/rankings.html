@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+  	<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -50,7 +50,6 @@
             <li><a href="{{ url_for('home') }}">Home</a></li>
             <li><a href="{{ url_for('pick_county') }}">Pick a county</a></li>
             <li class="active"><a href="{{ url_for('rankings') }}">Rankings</a></li>
-            <li><a href="{{ url_for('map') }}">Map view</a></li>
 			</ul>
             </li>
           </ul>
@@ -61,11 +60,26 @@
     <!-- Begin page content -->
     <div class="container">
       <div class="page-header">
-        <h1>container</h1>
+        <h1>Rankings</h1>
       </div>
-      <p class="lead">Pin a fixed-height footer to the bottom of the viewport in desktop browsers with this custom HTML and CSS. A fixed navbar has been added with <code>padding-top: 60px;</code> on the <code>body &gt; .container</code>.</p>
-      <p>Back to <a href="../sticky-footer">the default sticky footer</a> minus the navbar.</p>
-    </div>
+      <p class="lead">Do you wonder which are the best and worst US counties to open a bar? Here are the charts that may guide you in your business endeavor.<br><br>
+The column <b>model/acutal</b> is the one used to sort the counties. A value of 1 means that the number of bars given by the model is the same as the actual number of bars, a value greater than 1 means that the model considers that there can be more bars in that district, while a value smaller than one means that according to the model there are too many bars. For instance the value 0.10 of Chippewea County, WI, means that the model considers that there are 10 times more bars than needed, so it is not a good place to open another one. Also the <b>County area</b> is expressed in square miles. 
+
+
+<table class="image" align="center">
+<tr><td align="center"><caption align="top" ><b><h2>Best places to open a bar</h2></b></caption></td></tr>
+<tr><td align="center"><img src="/static/best_counties_to_open_a_bar.png" alt="table1"></td></tr>
+</table>
+
+<br><br><br><br>
+
+<table class="image" align="center">
+<tr><td align="center"><caption align="top"><b><h2>Worst places to open a bar</h2></b></caption></td></tr>
+<tr><td><img src="/static/worst_counties_to_open_a_bar.png" alt="table1"></tr>
+</table>
+
+
+
 
     <footer class="footer">
       <div class="container">

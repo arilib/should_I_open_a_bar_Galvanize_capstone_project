@@ -2,13 +2,13 @@ import pandas as pd
 import numpy as np
 import pickle
 from sklearn.linear_model import LinearRegression, Ridge, RANSACRegressor
-from sklearn.model_selection import train_test_split, cross_val_score, cross_val_predict
+from sklearn.model_selection import train_test_split, cross_val_predict
 import matplotlib.pyplot as plt
 import warnings
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.preprocessing import StandardScaler
-
+from sklearn.metrics import explained_variance_score
 
 def split_data(filename):
     # scaler=StandardScaler()
@@ -32,8 +32,8 @@ def lin_reg(X_train, X_test, y_train, y_test):
     model = lr.fit(X_train,y_train)
     y_train_pred = model.predict(X_train)
     y_test_pred = model.predict(X_test)
-    train_score = cross_val_score(model, y_train.reshape(-1,1), y_train_pred.reshape(-1,1), cv = 5)
-    test_score = cross_val_score(model, y_test.reshape(-1,1), y_test_pred.reshape(-1,1), cv = 5)
+    train_score = explained_variance_score(y_train.reshape(-1,1), y_train_pred.reshape(-1,1))
+    test_score = explained_variance_score(y_test.reshape(-1,1), y_test_pred.reshape(-1,1))
     return(model, train_score, test_score)
 
 def rid_reg(X_train, X_test, y_train, y_test):
@@ -41,8 +41,8 @@ def rid_reg(X_train, X_test, y_train, y_test):
     model = rr.fit(X_train,y_train)
     y_train_pred = model.predict(X_train)
     y_test_pred = model.predict(X_test)
-    train_score = cross_val_score(model, y_train.reshape(-1,1), y_train_pred.reshape(-1,1), cv = 5)
-    test_score = cross_val_score(model, y_test.reshape(-1,1), y_test_pred.reshape(-1,1), cv = 5)
+    train_score = explained_variance_score(y_train.reshape(-1,1), y_train_pred.reshape(-1,1))
+    test_score = explained_variance_score(y_test.reshape(-1,1), y_test_pred.reshape(-1,1))
     return(model, train_score, test_score)
 
 def tr_reg(X_train, X_test, y_train, y_test):
@@ -50,8 +50,8 @@ def tr_reg(X_train, X_test, y_train, y_test):
     model = regr.fit(X_train, y_train)
     y_train_pred = model.predict(X_train)
     y_test_pred = model.predict(X_test)
-    train_score = cross_val_score(model, y_train.reshape(-1,1), y_train_pred.reshape(-1,1), cv = 5)
-    test_score = cross_val_score(model, y_test.reshape(-1,1), y_test_pred.reshape(-1,1), cv = 5)
+    train_score = explained_variance_score(y_train.reshape(-1,1), y_train_pred.reshape(-1,1))
+    test_score = explained_variance_score(y_test.reshape(-1,1), y_test_pred.reshape(-1,1))
     return(model, train_score, test_score)
 
 def rf_reg(X_train, X_test, y_train, y_test):
@@ -59,23 +59,14 @@ def rf_reg(X_train, X_test, y_train, y_test):
     model = regr.fit(X_train, y_train)
     y_train_pred = model.predict(X_train)
     y_test_pred = model.predict(X_test)
-    train_score = cross_val_score(model, y_train.reshape(-1,1), y_train_pred.reshape(-1,1), cv = 5)
-    test_score = cross_val_score(model, y_test.reshape(-1,1), y_test_pred.reshape(-1,1), cv = 5)
+    train_score = explained_variance_score(y_train.reshape(-1,1), y_train_pred.reshape(-1,1))
+    test_score = explained_variance_score(y_test.reshape(-1,1), y_test_pred.reshape(-1,1))
     importances = regr.feature_importances_
     print(importances)
     return(model, train_score, test_score)
 
-def rar_reg(X_train, X_test, y_train, y_test):
-    regr = RANSACRegressor(random_state = 7)
-    model = regr.fit(X_train, y_train)
-    y_train_pred = model.predict(X_train)
-    y_test_pred = model.predict(X_test)
-    train_score = cross_val_score(model, y_train.reshape(-1,1), y_train_pred.reshape(-1,1), cv = 5)
-    test_score = cross_val_score(model, y_test.reshape(-1,1), y_test_pred.reshape(-1,1), cv = 5)
-    return(model, train_score, test_score)
-
-def store_model_info(county_info_df, model, cols):
-    output = open('model_and_cols.pkl', 'wb')
+def store_model_info(filename, county_info_df, model, cols):
+    output = open(filename, 'wb')
     pickle.dump(county_info_df, output)
     pickle.dump(model, output, -1)
     pickle.dump(cols, output, -1)
@@ -84,10 +75,12 @@ def store_model_info(county_info_df, model, cols):
 
 def actual_pred_plot(model_name, mp, model, X_test, y_test, filename):
     y = y_test.reshape(-1,1)
-    predicted = cross_val_predict(model, X_test, y, cv = 5)
+    predicted = cross_val_predict(model, X_test, y)
     fig, ax = plt.subplots()
     ax.scatter(y, predicted, edgecolors=(0, 0, 0), alpha=0.3)
     ax.plot([y.min(), y.max()], [y.min(), y.max()], 'k--', lw=4)
+    # ax.set_xlim(right=400)
+    # ax.set_ylim(top=400)
     ax.set_xlabel('Actual number of bars')
     ax.set_ylabel('Predicted number of bars')
     ax.set_label(model_name)
@@ -100,7 +93,7 @@ if __name__ == '__main__':
     filename = '../data/2015_lin_sd_rnd_nan_to_min.csv'
     X_train, X_test, y_train, y_test, county_info_df, cols = split_data(filename)
 
-    print(filename)
+    # print(filename)
 
     list_of_models = [('lr', 'Linear Regression', 'lr_model'), ('rr', 'Ridge Regression', 'rr_model'), ('tr', 'Decision Tree Regressor', 'tr_model'), ('rr', 'Random Forest Regressor', 'rf_model')]
 
@@ -112,7 +105,6 @@ if __name__ == '__main__':
     rr_model, rr_train_score, rr_test_score = rid_reg(X_train, X_test, y_train, y_test)
     tr_model, tr_train_score, tr_test_score = tr_reg(X_train, X_test, y_train, y_test)
     rf_model, rf_train_score, rf_test_score = rf_reg(X_train, X_test, y_train, y_test)
-    ra_model, ra_train_score, ra_test_score = rar_reg(X_train, X_test, y_train, y_test)
 
     model_name = 'Linear Regression'
     print(model_name+' Score\nTrain: {0}\nTest: {1}\n'. format(round(lr_train_score.mean(),3), round(lr_test_score.mean(),3)))
@@ -130,8 +122,6 @@ if __name__ == '__main__':
     print(model_name+' Score\nTrain: {0}\nTest: {1}\n'. format(round(rf_train_score.mean(),3), round(rf_test_score.mean(),3)))
     actual_pred_plot(model_name, 'rf', rf_model, X_test, y_test, filename)
 
-    model_name = 'RANSAC Regressor'
-    print(model_name+' Score\nTrain: {0}\nTest: {1}\n'. format(round(ra_train_score.mean(),3), round(ra_test_score.mean(),3)))
-    actual_pred_plot(model_name, 'ra', ra_model, X_test, y_test, filename)
-
-    store_model_info(county_info_df, rf_model, cols)
+    store_model_info('model_and_cols.pkl', county_info_df, rf_model, cols)
+    store_model_info('../web_app/model_and_cols.pkl', county_info_df, rf_model, cols)
+    store_model_info('../web_app_0/model_and_cols.pkl', county_info_df, rf_model, cols)
