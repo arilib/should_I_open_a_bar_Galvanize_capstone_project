@@ -18,7 +18,7 @@
     <link href="../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="sticky-footer-navbar.css" rel="stylesheet">
+    <link href="../static/css/sticky-footer-navbar.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -66,62 +66,97 @@
       <p class="lead">Pin a fixed-height footer to the bottom of the viewport in desktop browsers with this custom HTML and CSS. A fixed navbar has been added with <code>padding-top: 60px;</code> on the <code>body &gt; .container</code>.</p>
 
 
-<form class="form-inline">
-<label class="mr-sm-2" for="inlineFormCustomSelectPref">Select state</label>
-{{ form.state(**{"onchange":"getCategories()"}) }}
-{{ form.county(**{"onchange":"getCategories()"}) }}
 
- <script charset="utf-8" type="text/javascript">
+   <!-- Begin form -->
+<form action='/advice/', method='POST'>
+  <div><h4><b>First, choose a state</b></h4></div>
+<div class="col-sm-5"><select name="state" id="select_state" class="selectpicker form-control">
+    <option selected="selected" value = ''>Select a state</option>
+    {% for state in states %}
+    <option value="{{ state }}">{{ state[1] }}</option>
+    {% endfor %}
+</select></div>
 
-$(function() {
+<br><br>
 
-    // jQuery selection for the 2 select boxes
-    var dropdown = {
-        state: $('#select_state'),
-        county: $('#select_county')
-    };
 
-    // call to update on load
-    updateCounties();
-
-    // function to call XHR and update county dropdown
-    function updateCounties() {
-        var send = {
-            state: dropdown.state.val()
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script charset="utf-8" type="text/javascript">
+    $(function() {
+        var dropdown = {
+            state: $('#select_state'),
+            county: $('#select_county')
         };
-        dropdown.county.attr('disabled', 'disabled');
-        dropdown.county.empty();
-        $.getJSON("{{ url_for('_get_counties') }}", send, function(data) {
-            data.forEach(function(item) {
-                dropdown.county.append(
-                    $('<option>', {
-                        value: item[0],
-                        text: item[1]
-                    })
-                );
-            });
-            dropdown.county.removeAttr('disabled');
+        function getURL() {
+            var state = dropdown.state.val();
+            if (state.length) {
+              $('#make_url').click(function(e) {
+                e.preventDefault();
+                });
+            }
+        }
+        dropdown.state.on('change', function() {
+            getURL();
         });
-    }
+    });
+</script>
 
-<label class="mr-sm-2" for="inlineFormCustomSelectPref">Select state</label>
-{{ form.county(**{"onchange":"getCategories()"}) }}
 
-<!--
- 
-<label class="mr-sm-2" for="inlineFormCustomSelectPref">Preference</label>
-  <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="inlineFormCustomSelectPref">
-    <option value="1">One</option>
-    <option value="2">Two</option>
-    <option value="3">Three</option>
-  </select>
--->
-  <button type="submit" class="btn btn-primary">Submit</button>
+
+<div><h4><b>Then, choose a county</b></h4></div>
+<div class="col-sm-5"><select name="county" id="select_county" class="selectpicker form-control" disabled>
+    <option selected="selected" value = ''>Select a county</option>
+</select></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script charset="utf-8" type="text/javascript">
+    $(function() {
+        var dropdown = {
+            state: $('#select_state'),
+            county: $('#select_county')
+        };
+        // function to call update county dropdown
+        function updateCounty() {
+            var state = dropdown.state.val();
+            dropdown.county.attr('disabled', 'disabled');
+			console.log(state);
+            if (state.length) {
+                dropdown.county.empty();
+                $.getJSON("{{ url_for('get_counties') }}", {state: state}, function(data) {
+                    console.log(data);
+                    data.forEach(function(item) {
+                        dropdown.county.append(
+                            $('<option>', {
+                                
+                                value: item[0],
+                                text: item[1]
+                            })
+                        );
+                    });
+                    dropdown.county.removeAttr('disabled');
+                });
+            }
+        }
+        // event listener to customer dropdown change
+        dropdown.state.on('change', function() {
+            updateCounty();
+        });
+    });
+</script>
+
+<br><br>
+
+
+<div class='move-button'>
+<button type="submit">Advice</button>
+</div>
+
 </form>
 
-    </div>
+</div>
+ 
 
-    <footer class="footer">
+   <footer class="footer">
       <div class="container">
         <center><p class="text-muted">Ariel Libertun - Galvanize Data Science Immersive - Denver 8</p></center>
       </div>

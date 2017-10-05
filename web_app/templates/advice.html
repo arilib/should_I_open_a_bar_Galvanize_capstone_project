@@ -61,97 +61,20 @@
     <!-- Begin page content -->
     <div class="container">
       <div class="page-header">
-        <h1>Pick a county</h1>
+        <h1>Model results</h1>
       </div>
-      <p class="lead">Pin a fixed-height footer to the bottom of the viewport in desktop browsers with this custom HTML and CSS. A fixed navbar has been added with <code>padding-top: 60px;</code> on the <code>body &gt; .container</code>.</p>
+      <p class="lead">
+
+Location: <b>{{req_county}}</b> <br>
+Actual number of bars (according to the US Census Bureau 2015): <b>{{actual}}</b><br>
+Our model indicates that this market can support between <b>{{low_numb}}</b> and <b>{{high_numb}}</b> bars.<br><br>
+<b>Conclusion</b><br>
+These values seem to indicate that the <b>{{req_county}}</b> bar market is <b>{{market_status}}</b>.<br>
+{{evalu}}
+
+</p>
 
 
-
-   <!-- Begin form -->
-<form action='/advice/', method='POST'>
-  <div><h4><b>First, choose a state</b></h4></div>
-<div class="col-sm-5"><select name="state" id="select_state" class="selectpicker form-control">
-    <option selected="selected" value = ''>Select a state</option>
-    {% for state in states %}
-    <option value="{{ state }}">{{ state[1] }}</option>
-    {% endfor %}
-</select></div>
-
-<br><br>
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script charset="utf-8" type="text/javascript">
-    $(function() {
-        var dropdown = {
-            state: $('#select_state'),
-            county: $('#select_county')
-        };
-        function getURL() {
-            var state = dropdown.state.val();
-            if (state.length) {
-              $('#make_url').click(function(e) {
-                e.preventDefault();
-                });
-            }
-        }
-        dropdown.state.on('change', function() {
-            getURL();
-        });
-    });
-</script>
-
-
-
-<div><h4><b>Then, choose a county</b></h4></div>
-<div class="col-sm-5"><select name="county" id="select_county" class="selectpicker form-control" disabled>
-    <option selected="selected" value = ''>Select a county</option>
-</select></div>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script charset="utf-8" type="text/javascript">
-    $(function() {
-        var dropdown = {
-            state: $('#select_state'),
-            county: $('#select_county')
-        };
-        // function to call update county dropdown
-        function updateCounty() {
-            var state = dropdown.state.val();
-            dropdown.county.attr('disabled', 'disabled');
-			console.log(state);
-            if (state.length) {
-                dropdown.county.empty();
-                $.getJSON("{{ url_for('get_counties') }}", {state: state}, function(data) {
-                    console.log(data);
-                    data.forEach(function(item) {
-                        dropdown.county.append(
-                            $('<option>', {
-                                
-                                value: item[0],
-                                text: item[1]
-                            })
-                        );
-                    });
-                    dropdown.county.removeAttr('disabled');
-                });
-            }
-        }
-        // event listener to customer dropdown change
-        dropdown.state.on('change', function() {
-            updateCounty();
-        });
-    });
-</script>
-
-<br><br><br><br>
-
-
-<div class='move-button'>
-<button type="submit">Advice</button>
-</div>
-
-</form>
 
 </div>
  
