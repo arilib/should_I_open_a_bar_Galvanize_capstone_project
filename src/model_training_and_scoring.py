@@ -46,7 +46,7 @@ def rid_reg(X_train, X_test, y_train, y_test):
     return(model, train_score, test_score)
 
 def tr_reg(X_train, X_test, y_train, y_test):
-    regr = DecisionTreeRegressor(random_state = 7, max_depth=3)
+    regr = DecisionTreeRegressor(random_state = 7, max_depth=5)
     model = regr.fit(X_train, y_train)
     y_train_pred = model.predict(X_train)
     y_test_pred = model.predict(X_test)
@@ -55,7 +55,7 @@ def tr_reg(X_train, X_test, y_train, y_test):
     return(model, train_score, test_score)
 
 def rf_reg(X_train, X_test, y_train, y_test):
-    regr = RandomForestRegressor(n_estimators=20, max_depth=3, oob_score=True, n_jobs = -1, random_state = 7)
+    regr = RandomForestRegressor(n_estimators=20, max_depth=6, oob_score=True, n_jobs = -1, random_state = 7)
     model = regr.fit(X_train, y_train)
     y_train_pred = model.predict(X_train)
     y_test_pred = model.predict(X_test)
@@ -79,13 +79,13 @@ def actual_pred_plot(model_name, mp, model, X_test, y_test, filename):
     fig, ax = plt.subplots()
     ax.scatter(y, predicted, edgecolors=(0, 0, 0), alpha=0.3)
     ax.plot([y.min(), y.max()], [y.min(), y.max()], 'k--', lw=4)
-    # ax.set_xlim(right=400)
-    # ax.set_ylim(top=400)
+    ax.set_xlim(right=400)
+    ax.set_ylim(top=400)
     ax.set_xlabel('Actual number of bars')
     ax.set_ylabel('Predicted number of bars')
     ax.set_label(model_name)
     plt.loglog
-    plt.savefig('../figures/'+mp+filename[9:-3]+'png')
+    plt.savefig('../figures/'+mp+'400'+filename[9:-3]+'png')
     return()
 
 if __name__ == '__main__':

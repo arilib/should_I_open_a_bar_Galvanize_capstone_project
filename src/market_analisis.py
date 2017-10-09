@@ -53,5 +53,5 @@ if __name__ == '__main__':
     state = input('Enter the state you are interested in:\n')
     county = input('\nEnter the county you are interested in:\n')
     index, req_county = index_finder(county, state, county_info_df)
-    pred_y, lower_y, upper_y, actual_y = predict_bars(index, county_info_df, model, cols)
-    print('\nAccording to this model, the number of bars {3} could suport is between {4} and {5} bars\n The actual number of bars: {1}\nDifference: {2}\n'.format(min(0,pred_y), actual_y, pred_y - actual_y, req_county, min(0,lower_y), upper_y))
+    pred_y, lower_y, upper_y, actual_y = predict_bars(index, county_info_df, model, cols, 68)
+    print('\nAccording to this model, the number of bars {3} could suport is between {4} and {5} bars\n The actual number of bars: {1}\nDifference: {2}\n'.format(max(0,pred_y), actual_y, pred_y - actual_y, req_county, max(0,lower_y), upper_y))

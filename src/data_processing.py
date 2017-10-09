@@ -34,11 +34,17 @@ if __name__ == '__main__':
 
     # Loads the csv with the the hotels with payroll
     dfh1 = processing('../data/BP_2015_00A1_with_ann_hot_utf8.csv', 'ESTAB', 'hot_big')
-    dfh1.head()
     # Loads the csv with the the hotels without payroll
     dfh2 = processing('../data/NES_2015_00A2_with_ann_hot_utf8.csv', 'NESTAB', 'hot_small', all_numeric=False)
-    dfh2.head()
 
+    # Loads the csv with the liquor stores
+    dfls = processing('../data/BP_2015_00A1_with_ann_utf8.csv', 'ESTAB', 'liquor_stores')
+    # Loads the csv with household income
+    # dfls_clean = dfls['ESTAB']
+    dfin = processing('../data/ACS_15_5YR_S1901_with_ann_utf8.csv', 'HC01_EST_VC13', 'household_median_income', all_numeric=False)
+    # dfin.apply(pd.to_numeric)
+    # print(dfin.dtypes)
+    # # dfin['household_median_income'] = dfin['household_median_income'].astype(int)
     # Create new demo_df with only 2015 columns (the col used were selected by exploring the csv file in a notebook)
     demo_df2 = selec_col_df(demo_df, ['STNAME', 'CTYNAME', 'POPESTIMATE2015', 'NPOPCHG_2015'])
 
@@ -55,7 +61,7 @@ if __name__ == '__main__':
     demo_geo_df['log_pop_est_2015'] = np.log10(demo_geo_df['POPESTIMATE2015'])
     demo_geo_df['pop_den_2015'] = demo_geo_df['POPESTIMATE2015']/demo_geo_df['ALAND_SQMI']
     demo_geo_df['log_pop_den_2015'] = np.log10(demo_geo_df['pop_den_2015'])
-    demo_geo_df['pop_ch_10000_2015'] = 10000*demo_geo_df['NPOPCHG_2015']/demo_geo_df['POPESTIMATE2015']
+    # demo_geo_df['pop_ch_10000_2015'] = 10000*demo_geo_df['NPOPCHG_2015']/demo_geo_df['POPESTIMATE2015']
     demo_geo_df['county_name'] = demo_geo_df['CTYNAME'] + ', ' + demo_geo_df['USPS']
 
     # Sort the columns
@@ -68,11 +74,14 @@ if __name__ == '__main__':
     # A reduced df with the features we think we want to keep right now
     demo_geo_df_2 = sorted_df[['geo_id', 'state_name', 'state_code', 'county_name', 'area_sqmi', 'log_area_sqmi', 'pop_est_2015', 'log_pop_est_2015', 'pop_den_2015', 'log_pop_den_2015']]
 
-    # Merges all the hotels and bars to the main df
-    hotels_df = pd.merge(dfh1, dfh2, on='geo_id', how='left')
-    bars_df = pd.merge(dfb1, dfb2, on='geo_id', how='left')
-    hot_bar_df = pd.merge(hotels_df, bars_df, on='geo_id', how='left')
-    all_merged_df = pd.merge(demo_geo_df_2, hot_bar_df, on='geo_id', how='left')
+    # Merges all the hotels, income, liquor stores and bars to the main df
+    hotels_df = pd.merge(dfh1, dfh2, on='geo_id', how='outer')
+    bars_df = pd.merge(dfb1, dfb2, on='geo_id', how='outer')
+    hot_bar_df = pd.merge(hotels_df, bars_df, on='geo_id', how='outer')
+    inc_liqu = pd.merge(dfls, dfin, on='geo_id', how='right')
+    hot_bar_liq_inc_df = pd.merge(inc_liqu, hot_bar_df, on='geo_id', how='left')
+    all_merged_df = pd.merge(demo_geo_df_2, hot_bar_liq_inc_df, on='geo_id', how='outer')
+    print(len(demo_geo_df_2),len(hotels_df),len(bars_df),len(hot_bar_df),len(inc_liqu),len(hot_bar_liq_inc_df),len(all_merged_df))
 
     # Makes the columns floats to be able to operate on them
     all_merged_df['hot_big'] = all_merged_df['hot_big'].astype(float)
@@ -81,6 +90,7 @@ if __name__ == '__main__':
     # Fills the NaN in with the min of the rows with values
     all_merged_df['bar_big'].fillna(all_merged_df['bar_big'].min(), inplace=True)
     all_merged_df['hot_big'].fillna(all_merged_df['hot_big'].min(), inplace=True)
+    all_merged_df['liquor_stores'].fillna(all_merged_df['liquor_stores'].min(), inplace=True)
 
     # Fills the NaN in with the min of the rows with values
     all_merged_df['bar_small'].fillna(3, inplace=True)
@@ -97,9 +107,9 @@ if __name__ == '__main__':
     all_merged_df['log_bars'] = np.log10(all_merged_df['bars'])
     all_merged_df['log_hotels'] = np.log10(all_merged_df['hotels'])
 
-    all_merged_df_lin = all_merged_df[['geo_id', 'state_name', 'state_code', 'county_name', 'area_sqmi', 'pop_est_2015', 'hotels', 'bars']]
+    all_merged_df_lin = all_merged_df[['geo_id', 'state_name', 'state_code', 'county_name', 'area_sqmi', 'pop_est_2015', 'pop_den_2015', 'hotels', 'liquor_stores', 'household_median_income', 'bars']]
 
-    all_merged_df_log = all_merged_df[['geo_id', 'state_name', 'state_code', 'county_name', 'log_area_sqmi', 'log_pop_est_2015', 'log_hotels', 'bars']]
+    all_merged_df_log = all_merged_df[['geo_id', 'state_name', 'state_code', 'county_name', 'log_area_sqmi', 'log_pop_est_2015', 'pop_den_2015', 'log_hotels', 'household_median_income', 'bars']]
 
     # Saves the dataframe as a csv with all cols as a checkpoint
     sorted_df.to_csv('../data/2015_demo_geo.csv')
