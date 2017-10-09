@@ -91,10 +91,10 @@ def rankings():
     '''Page showing the rankings of best and worst counties and a map'''
     return render_template('rankings.html')
 
-@app.route('/map/', methods=['GET', 'POST'])
-def map():
-    '''Page showing a county level map'''
-    return render_template('map.html')
+# @app.route('/map/', methods=['GET', 'POST'])
+# def map():
+#     '''Page showing a county level map'''
+#     return render_template('map.html')
 
 
 if __name__ == '__main__':
@@ -102,4 +102,3 @@ if __name__ == '__main__':
     states = county_info_df.state_name.unique()
     state_list = [(idx, states[idx]) for idx in range(len(states))]
     app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
-
