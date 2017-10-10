@@ -103,9 +103,6 @@ The second one is to improve the usability of the results. Two options are:
 - Finding more ways of presenting the data and the results of the model
 
 
-
-### List of things to do
-
 ## Some useful references and resources
 ### Sources of the data used:
 1. US Census Bureau: [https://www.census.gov](https://www.census.gov/)
@@ -114,3 +111,29 @@ The second one is to improve the usability of the results. Two options are:
 #### Useful articles:
 1. [Source by OpenNews: <b><i>How to Use the Census Bureau’s American Community Survey like a Pro</i></b>](https://source.opennews.org/articles/how-use-census-bureau-american-community-survey/)<br>by Paul Overberg
 2. [TrendCT.org: <b><i>Tutorial: How to understand and retrieve Census data — for beginners</i></b>](https://trendct.org/2015/08/14/tutorial-how-to-understand-and-retrieve-census-data-for-beginners/)<br> by Alvin Chang
+
+## Folder structure
+
+/src<br>
+
+data_processing.py: python script that process the data and produces csv files to be used as input for the other codes.<br>
+model_training_and_scoring.py: python script that evaluates the models and returns the model, the dataframe with the information and the list of columns in a pickle format.<br>
+market_analisis.py: a python script with the very first basic and all text version of the market analysis.<br>
+model_and_cols.pkl: pickle file with the slected model, the dataframe with the information and the list of columns.<br><br>
+
+/src/jupyter_notebooks<br>
+jupyter notebooks used to generate some of the figures and tables using in this project (names should be self explanatory).<br>
+
+/web_app<br>
+bars_web_app.py: flask code to run the back end of the Website<br>
+/web_app/static<br>
+All the css files for formatting the Website<br>
+web_app/templates<br>
+All the html templates for the website.
+
+
+7. [Technology Stack](technology-stack)
+
+<img alt="HScatter plot of predicted number of bars as a function of the actual number of bars" src="figures/tech_stack.png" width='1500'>
+<div style="text-align: center"><sub><b>Figure 3: </b> Scatter plot of the predicted number of plots as a function of the actual number of bars</sub>
+<br>
