@@ -1,83 +1,110 @@
 
 # <div style="text-align: center">Should I Open a Bar?</div>
 <div style="text-align: right"> Capstone project, Denver Cohort 8<br>
-Ariel Libertun</div><br>
+Ariel "Ari" Libertun</div><br>
 
 
 
+The question about whether to start a business is one that many people can relate to and that is what motivated me to use it for my capstone. In this project we use a machine learning technique, combined with publicly available data from the US Census Bureau to provide a basic market analysis and a friendly way to access it.
 
-This project demonstrates one of the powers of data science. It uses a machine learning algorithm, trained with publicly available data produced by the US Census' American Community Survey program, to help answer a question that might be easier to ask than to respond.
+The result of this project is a proof-of-concept web app that can help in data driven business decision making
+
+This project is about using data and data science to answer a question that many people can relate to: whether to open a business. It uses a machine learning algorithm, trained with publicly available data produced by the US Census' American Community Survey program, to help answer a question that might be easier to ask than to respond.
 
 ## Table of Contents
-1. [Why this question?](#why-this-question?)
-2. [The Data](#the-data)
+1. [Understanding the problem](#Understanding-the-problem)
+2. [The data](#the-data)
 3. [Model and features](#model-and-features)
+4. [The results](#the-results)
+5. [The final product](#the_final_product)
+6. [Future Directions and refinements](#future-directions-and-refinements)
 4. [Some useful references and resources](#some-useful-references-and-resources)
     * [Sources of the data used](#sources-of-the-data-used)
     * [Useful articles](#useful-articles)
-5. [Future Directions and refinements](#future-directions-and-refinements)
+6. [Folder structure and list of files](#folder-structure-and-list-of-files)
+7. [Technology Stack](technology-stack)
 
-## Why this question?
-As much as I might be interested in opening a bar, the question is an excuse to show many points of the data science process. Bars belong to a class of business that require the physical presence of the customer and it is not really replaced by any sort of delivery or e-commerce alternative. As such, the number of bars that a particular market can support must be strongly dependent on local features, such as population, average income, etc.<br><br>
-Those are features, as well as the number of bars among many other, the US Census Bureau provides through their American Community Survey program for everybody to use.
+## Understanding the problem
+A bar belong to a class of business where location is important, it is not possible to e-commerce the bar experience. Because of that, the number of bars that a particular market can support must be mostly dependent on local characteristics, such as population, average income, etc. When choosing the kind of location to base this study, I looked for a location category with enough cases and variation, and at the same time with some sort of similarity or common denominators. US counties satisfied these conditions, as it will be shown later in the EDA section.<br>
+One other thing necessary to address the problem was to select the right features. For this project we selected six:<br>
+* area
+* population
+* population density
+* household median income
+* number of liquor stores
+* number of hotels
+
+The reason to include the number of hotels as a feature is for it to be a proxy of the travelers visiting a county. The patrons of a bar are the local population and as well as the visitors.
+
+<br><br>
 
 ## The Data
-All the data was obtained from the US Census Bureau Website.
+All the data was obtained from the US Census Bureau Website, in particular through their Fact Finder interface. We used information from 2015, as that was the most recent year where we could find all the variables we needed. All downloaded data was processed, formated as a panda data frame and saved as a csv file to be used in the analysis and model choosing performed later. The python code is in src/data_processing.py and the csv file with all data and features is in data/2015_master_sd_rnd_nan_to_min.csv.
 
-
-
-Using geographic, demographic and economic information at the county level to train a machine learning model presents some attractive advantages. One of them is its diversity, with areas, population and population densities that span over many order of magnitude, as it can be seen in the histograms of figure 1.
-
+Using geographic, demographic and economic information at the county level to train a machine learning model presents some attractive advantages, one of them being its diversity. As part of an initial exploratory data analysis (EDA), I plotted histograms with areas, population and population densities. When linear scales are used for the horizontal axis, the presences of very large cases prevent the visualization of the actual distribution, as can be appreciated in figure 1.
 
 <img alt="Histograms of county areas, populations and population densities" src="figures/area_pop_dens_hist.png" width='1500'>
-<div style="text-align: center"><sub><b>Figure 1: </b> Histograms of area, population and population density </sub>
+<div style="text-align: center"><sub><b>Figure 1: </b> Histograms of area, population and population density on linear horizontal axis</sub>
 
+To really appreciate the distribution of these characteristics it is useful to transform the horizontal axis into a log10 scale, that is to plot histograms of the log10 quantity instead of the quantity itself. The results can be seen in figure 2. The advantage of the log10 transformation, as opposed to some other log, is the interpretability of the numbers shown on the horizontal axis, they indicate the actual number for zeros, or order of magnitude, of the quantity.
 
+<img alt="Histograms of county areas, populations and population densities" src="figures/logs_area_pop_dens_hist.png" width='1500'>
+<div style="text-align: center"><sub><b>Figure 2: </b> Histograms of area, population and population density on a log10 horizontal axis</sub>
 
-An initial analysis of whether is okay to use population, county area, and population density. As it can be seen in the right-most scatter plot of figure 2, the population and the population density are quite correlated.  
-
-
-<img alt="Histograms of county areas, populations and population densities" src="figures/area_pop_dens_scatters.png" width='1500'>
-<div style="text-align: center"><sub><b>Figure 2: </b> Histograms of area, population and population density </sub>
-
-Another scatter plot is shown in figure 3.
-
-
-<img alt="Histograms of county areas, populations and hotels" src="figures/area_pop_hotels_scatters.png" width='1500'>
-<div style="text-align: center"><sub><b>Figure 3: </b> Histograms of area, population and hotels </sub>
 
 ## Model and features
-The model used is a Random Forest Regressor with 20 estimators and maximum depth of 3. The order of the feature importance is:<br>
-Population (0.70497742)
-Number of hotels (0.25348337)
-County Area (0.04153921)
+To select the best model to use counties were randomly separated in a train and test subsets on a 70% to 30% proportion. The models explored where linear regression, linear regression with Ridge regularization, single tree regressor and random forest regressor. They were evaluated on the explained variance score with the following results:
+- linear regression
+  - training: 0.81
+  - testing: 0.69
+- linear regression with Ridge regularization
+  - training: 0.81
+  - testing: 0.69
+- single tree regressor (maximum depth of 6)
+  - training: 0.94
+  - testing: 0.70
+- random forest regressor (20 estimators and maximum depth of 6)
+  - training: 0.93
+  - testing: 0.84
 
-To choose this model in particular, we evaluated the cross correlation score. The values obtained (Train: 0.806, Test: 0.673) where marginally better than the lineal regression and Ridge regression, but we preferred this model because it never returned negative values in its predictions.
+The model finally chosen was the Random Forest Regressor with 20 estimators and maximum depth of 6, for its highest score in testing and for not predicting negative number of bars. The order of the feature importance and their relative importance as returned by the feature_importances method are:<br>
+1. Population: 0.62
+2. Hotels: 0.23
+3. Liquor Stores: 0.05
+4. Pop. Density: 0.04
+5. Household Median Income: 0.04
+6. Area: 0.02
 
 
-## Future Directions and refinements
+## The results
 
-I have a csv file with a simplified dataset
-I have a model running that rather poorly models the number of bars
-I have a 1970 style interface that can interact with the user.
+The results of this model are shown in figure 3. It is presented in the form of a scatter plot, with the vertical axes representing the model prediction and the horizontal the actual number of bars.
 
-<img alt="Primitive interface showing a prediction of the model" src="figures/Screenshot from 2017-09-28 00-31-55.png" width='1500'>
-<div style="text-align: center"><sub><b>Figure 3: </b> Primitive interface showing a prediction of the model </sub>
+<img alt="HScatter plot of predicted number of bars as a function of the actual number of bars" src="figures/rf400015_lin_sd_rnd_nan_to_min.png" width='1500'>
+<div style="text-align: center"><sub><b>Figure 3: </b> Scatter plot of the predicted number of plots as a function of the actual number of bars</sub>
+<br>
+
+In this representation, the counties above the 45 degrees line are counties where the model predicts a higher number of bars than actually are, while the ones bellow that line are counties with more bars than predicted.<br>
+
+## The final product
+
+Presenting the results in the format of figure 3 is very visual and clear, but not easy to use to figure out the situation on any particular county.
+
+To facilitate the usability of these results a I put together a website using flask and a bootstrap template, that at the time of this writing is live running on AWS and that can be accessed at https://goo.gl/sKtXVT. In this web up there is a page explaining the nature of the project, another one that returns a market analysis for a county of the users choice, and page with a ranking of the best and worst counties to open a bar.
+
+## Future Directions
+
+There are two main avenues to continue with this project. The first one is working on the model and the features. Some of the possibilities are:
+- Explore different set of features: Population of drinking age, average commute time, etc.
+- Keep exploring machine learning techniques<br><br>
+
+The second one is to improve the usability of the results. Two options are:
+- Tackle other granularities: Zip Codes, cities, urban areas, etc.
+- Finding more ways of presenting the data and the results of the model
+
+
 
 ### List of things to do
-
-#### Website
-Update it to current times
-
-#### Readme.md file
-Keep improving it. Make it more interestingly and more complete (explain more about the data selection)
-
-
-Some other features that may be added will be:
-median income
-switch population for population of drinking age
-number of liquor stores
-
 
 ## Some useful references and resources
 ### Sources of the data used:

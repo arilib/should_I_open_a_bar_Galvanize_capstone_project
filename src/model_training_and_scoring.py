@@ -122,6 +122,6 @@ if __name__ == '__main__':
     print(model_name+' Score\nTrain: {0}\nTest: {1}\n'. format(round(rf_train_score.mean(),3), round(rf_test_score.mean(),3)))
     actual_pred_plot(model_name, 'rf', rf_model, X_test, y_test, filename)
 
-    store_model_info('model_and_cols.pkl', county_info_df, rf_model, cols)
-    store_model_info('../web_app/model_and_cols.pkl', county_info_df, rf_model, cols)
-    store_model_info('../web_app_0/model_and_cols.pkl', county_info_df, rf_model, cols)
+    # store_model_info('model_and_cols.pkl', county_info_df, rf_model, cols)
+    # store_model_info('../web_app/model_and_cols.pkl', county_info_df, rf_model, cols)
+    # store_model_info('../web_app_0/model_and_cols.pkl', county_info_df, rf_model, cols)
