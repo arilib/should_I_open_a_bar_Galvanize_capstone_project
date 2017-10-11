@@ -70,7 +70,7 @@ The information generated is presented in two different ways, both accessible th
 
 
 
-<footer class="footer">
+    <footer class="footer">
       <div class="container">
         <center><p class="text-muted">Ariel Libertun - Galvanize Data Science Immersive - Denver</p></center><center><p class="text-muted">Visit my <a href="https://github.com/arilib/galvanize_capstone_project/blob/master/README.md" target="_blank">my Github page</a> for more technical info about this project</p></center>
       </div>

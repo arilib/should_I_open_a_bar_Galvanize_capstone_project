@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../favicon.ico">
 
-    <title>Should I open a bar? - Home</title>
+    <title>Should I open a bar? - Pick a county</title>
 
     <!-- Bootstrap core CSS -->
     <link href="../static/css/bootstrap.min.css" rel="stylesheet">
@@ -33,7 +33,7 @@
 
   <body>
 
-    <!-- Fixed navbar -->
+   <!-- Fixed navbar -->
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
@@ -47,8 +47,8 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="{{ url_for('home') }}">Home</a></li>
-            <li><a href="{{ url_for('pick_county') }}">Pick a county</a></li>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li class="active"><a href="{{ url_for('pick_county') }}">Pick a county</a></li>
             <li><a href="{{ url_for('rankings') }}">Rankings</a></li>
 			</ul>
             </li>
@@ -60,19 +60,27 @@
     <!-- Begin page content -->
     <div class="container">
       <div class="page-header">
-        <h1>Should I Open a Bar?</h1>
+        <h1>Model results</h1>
       </div>
-      <p class="lead"><br><br>
-In this website we offer an evaluation of whether a particular market is "thirsty" for new bars, fine as it is, or already has "some too many". We provide help to answer the question based on data and Data Science, and we show how this technology could be useful in answering this kind of seemingly unraleted questions.<br><br>
-The information generated is presented in two different ways, both accessible through the menu on the top of the page. The first option is a county-specific, short market analysis result presented after selecting a US state and county from the drop-down menus of the <b>Pick a county</b> section. The second alternative is to access the charts with the rankings of the 20 best and worst counties to open a bar, available by clicking on the <b>Rankings</b> menu option.  
-<br><br><br><b>Technical Note:</b> We use publicly available information from the US Census Bureau in combination with a Random Forest model and provide information about the market for bars - or <i>7224: Drinking places (alcoholic beverages)</i> for their technical denomination - on a county basis. Based on the local population, the number of travelers (included through the number of hotels), and the area of the county, this very simple model can evaluate whether a particular county has the right number of bars, to few or too many.<br><br><br><br><br><b>Warning Note:</b> This entire website is part of a capstone project for the Galvanize Data Science Immersive program. As such, it should be considered a "proof of concept" or "prototype" product that demonstrates some of the capabilities unleashed by the field of Data Science and not as a definitive business advise.</div>
+      <p class="lead">
+
+Location: <b>{{req_county}}</b> <br>
+Actual number of bars (according to the US Census Bureau 2015): <b>{{actual}}</b><br>
+Our model indicates that this market can support between <b>{{low_numb}}</b> and <b>{{high_numb}}</b> bars.<br><br>
+<b>Conclusion</b><br>
+These values seem to indicate that the <b>{{req_county}}</b> bar market is <b>{{market_status}}</b>.<br>
+{{evalu}}
+
+</p>
 
 
 
+</div>
+ 
 
-<footer class="footer">
+   <footer class="footer">
       <div class="container">
-        <center><p class="text-muted">Ariel Libertun - Galvanize Data Science Immersive - Denver</p></center><center><p class="text-muted">Visit my <a href="https://github.com/arilib/galvanize_capstone_project/blob/master/README.md" target="_blank">my Github page</a> for more technical info about this project</p></center>
+        <center><p class="text-muted">Ariel Libertun - Galvanize Data Science Immersive - Denver 8</p></center>
       </div>
     </footer>
 
@@ -85,6 +93,8 @@ The information generated is presented in two different ways, both accessible th
     <script src="../static/js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../assets/js/ie10-viewport-bug-workaround.js"></script>
+
+
   </body>
 </html>
 
