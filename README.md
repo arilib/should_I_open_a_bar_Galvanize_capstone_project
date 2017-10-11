@@ -134,6 +134,6 @@ All the html templates for the website.
 
 7. [Technology Stack](technology-stack)
 
-<img alt="HScatter plot of predicted number of bars as a function of the actual number of bars" src="figures/tech_stack.png" width='1500'>
+<img alt="HScatter plot of predicted number of bars as a function of the actual number of bars" src="figures/tech_stack.jpg" width='1500'>
 <div style="text-align: center"><sub><b>Figure 3: </b> Scatter plot of the predicted number of plots as a function of the actual number of bars</sub>
 <br>
