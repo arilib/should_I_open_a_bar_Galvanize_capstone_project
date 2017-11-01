@@ -7,9 +7,7 @@ Ariel "Ari" Libertun</div><br>
 
 The question about whether to start a business is one that many people can relate to and that is what motivated me to use it for my capstone. In this project we use a machine learning technique, combined with publicly available data from the US Census Bureau to provide a basic market analysis and a friendly way to access it.
 
-The result of this project is a proof-of-concept web app that can help in data driven business decision making
-
-This project is about using data and data science to answer a question that many people can relate to: whether to open a business. It uses a machine learning algorithm, trained with publicly available data produced by the US Census' American Community Survey program, to help answer a question that might be easier to ask than to respond.
+The result of this project is a proof-of-concept web app for people that like a data driven business decision making approach.
 
 ## Table of Contents
 1. [Understanding the problem](#Understanding-the-problem)
