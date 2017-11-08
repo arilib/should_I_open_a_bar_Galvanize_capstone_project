@@ -27,43 +27,25 @@ def split_data(filename):
     print(cols)
     return(X_train, X_test, y_train, y_test, county_info_df, cols)
 
-def lin_reg(X_train, X_test, y_train, y_test):
-    lr = LinearRegression(fit_intercept=True)
-    model = lr.fit(X_train,y_train)
+def model_running(model_code, X_train, X_test, y_train, y_test):
+    if model_code == 'lr':
+        lr = LinearRegression(fit_intercept=True)
+        model = lr.fit(X_train,y_train)
+    elif model_code == 'rr':
+        rr = Ridge(fit_intercept=True)
+        model = rr.fit(X_train,y_train)
+    elif model_code == 'tr':
+        tr = DecisionTreeRegressor(random_state = 7, max_depth=5)
+        model = tr.fit(X_train, y_train)
+    else: #model_code == fr:
+        fr = RandomForestRegressor(n_estimators=20, max_depth=6, oob_score=True, n_jobs = -1, random_state = 7)
+        model = fr.fit(X_train, y_train)
     y_train_pred = model.predict(X_train)
     y_test_pred = model.predict(X_test)
     train_score = explained_variance_score(y_train.reshape(-1,1), y_train_pred.reshape(-1,1))
     test_score = explained_variance_score(y_test.reshape(-1,1), y_test_pred.reshape(-1,1))
     return(model, train_score, test_score)
 
-def rid_reg(X_train, X_test, y_train, y_test):
-    rr = Ridge(fit_intercept=True)
-    model = rr.fit(X_train,y_train)
-    y_train_pred = model.predict(X_train)
-    y_test_pred = model.predict(X_test)
-    train_score = explained_variance_score(y_train.reshape(-1,1), y_train_pred.reshape(-1,1))
-    test_score = explained_variance_score(y_test.reshape(-1,1), y_test_pred.reshape(-1,1))
-    return(model, train_score, test_score)
-
-def tr_reg(X_train, X_test, y_train, y_test):
-    regr = DecisionTreeRegressor(random_state = 7, max_depth=5)
-    model = regr.fit(X_train, y_train)
-    y_train_pred = model.predict(X_train)
-    y_test_pred = model.predict(X_test)
-    train_score = explained_variance_score(y_train.reshape(-1,1), y_train_pred.reshape(-1,1))
-    test_score = explained_variance_score(y_test.reshape(-1,1), y_test_pred.reshape(-1,1))
-    return(model, train_score, test_score)
-
-def rf_reg(X_train, X_test, y_train, y_test):
-    regr = RandomForestRegressor(n_estimators=20, max_depth=6, oob_score=True, n_jobs = -1, random_state = 7)
-    model = regr.fit(X_train, y_train)
-    y_train_pred = model.predict(X_train)
-    y_test_pred = model.predict(X_test)
-    train_score = explained_variance_score(y_train.reshape(-1,1), y_train_pred.reshape(-1,1))
-    test_score = explained_variance_score(y_test.reshape(-1,1), y_test_pred.reshape(-1,1))
-    importances = regr.feature_importances_
-    print(importances)
-    return(model, train_score, test_score)
 
 def store_model_info(filename, county_info_df, model, cols):
     output = open(filename, 'wb')
@@ -84,8 +66,10 @@ def actual_pred_plot(model_name, mp, model, X_test, y_test, filename):
     ax.set_xlabel('Actual number of bars')
     ax.set_ylabel('Predicted number of bars')
     ax.set_label(model_name)
+    plt.title(model_name)
     plt.loglog
     plt.savefig('../figures/'+mp+'400'+filename[9:-3]+'png')
+    # plt.show()
     return()
 
 if __name__ == '__main__':
@@ -93,34 +77,15 @@ if __name__ == '__main__':
     filename = '../data/2015_lin_sd_rnd_nan_to_min.csv'
     X_train, X_test, y_train, y_test, county_info_df, cols = split_data(filename)
 
-    # print(filename)
+    list_of_models = [['lr', 'Linear Regression'], ['rr', 'Ridge Regression'], ['tr', 'Decision Tree Regressor'], ['fr', 'Random Forest Regressor']]
 
-    list_of_models = [('lr', 'Linear Regression', 'lr_model'), ('rr', 'Ridge Regression', 'rr_model'), ('tr', 'Decision Tree Regressor', 'tr_model'), ('rr', 'Random Forest Regressor', 'rf_model')]
-
-    # for model in list_of_models:
-    #     print(model[0], model[1], model[2])
-
-
-    lr_model, lr_train_score, lr_test_score = lin_reg(X_train, X_test, y_train, y_test)
-    rr_model, rr_train_score, rr_test_score = rid_reg(X_train, X_test, y_train, y_test)
-    tr_model, tr_train_score, tr_test_score = tr_reg(X_train, X_test, y_train, y_test)
-    rf_model, rf_train_score, rf_test_score = rf_reg(X_train, X_test, y_train, y_test)
-
-    model_name = 'Linear Regression'
-    print(model_name+' Score\nTrain: {0}\nTest: {1}\n'. format(round(lr_train_score.mean(),3), round(lr_test_score.mean(),3)))
-    actual_pred_plot(model_name, 'lr', lr_model, X_test, y_test, filename)
-
-    model_name = 'Ridge Regression'
-    print(model_name+' Score\nTrain: {0}\nTest: {1}\n'. format(round(rr_train_score.mean(),3), round(rr_test_score.mean(),3)))
-    actual_pred_plot(model_name, 'rr', rr_model, X_test, y_test, filename)
-
-    model_name = 'Decision Tree Regressor'
-    print(model_name+' Score\nTrain: {0}\nTest: {1}\n'. format(round(tr_train_score.mean(),3), round(tr_test_score.mean(),3)))
-    actual_pred_plot(model_name, 'tr', tr_model, X_test, y_test, filename)
-
-    model_name = 'Random Forest Regressor'
-    print(model_name+' Score\nTrain: {0}\nTest: {1}\n'. format(round(rf_train_score.mean(),3), round(rf_test_score.mean(),3)))
-    actual_pred_plot(model_name, 'rf', rf_model, X_test, y_test, filename)
+    for index in range(len(list_of_models)):
+        model_code = list_of_models[index][0]
+        model, train_score, test_score = model_running(model_code, X_train, X_test, y_train, y_test)
+        model_name = list_of_models[index][1]
+        list_of_models[index].extend([model, train_score, test_score])
+        print(model_name+' Score\nTrain: {0}\nTest: {1}\n'. format(round(train_score.mean(),3), round(test_score.mean(),3)))
+        actual_pred_plot(model_name, model_code, model, X_test, y_test, filename)
 
     # store_model_info('model_and_cols.pkl', county_info_df, rf_model, cols)
     # store_model_info('../web_app/model_and_cols.pkl', county_info_df, rf_model, cols)
