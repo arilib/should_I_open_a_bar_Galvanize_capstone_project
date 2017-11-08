@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import pickle
-from sklearn.linear_model import LinearRegression, Ridge, RANSACRegressor
+from sklearn.linear_model import LinearRegression, Ridge
 from sklearn.model_selection import train_test_split, cross_val_predict
 import matplotlib.pyplot as plt
 import warnings
@@ -15,6 +15,7 @@ def split_data(filename):
     df = pd.read_csv(filename)
     df = df.drop('Unnamed: 0', axis=1)
     county_info_df = df.copy()
+    # print(county_info_df)
     # df = df[df['bars'] >= 3]
     # df = df[df['hotels'] >= 3]
     y = np.array(df.pop('bars')).reshape(-1,1)
@@ -67,7 +68,6 @@ def actual_pred_plot(model_name, mp, model, X_test, y_test, filename):
     ax.set_ylabel('Predicted number of bars')
     ax.set_label(model_name)
     plt.title(model_name)
-    plt.loglog
     plt.savefig('../figures/'+mp+'400'+filename[9:-3]+'png')
     # plt.show()
     return()
@@ -79,14 +79,22 @@ if __name__ == '__main__':
 
     list_of_models = [['lr', 'Linear Regression'], ['rr', 'Ridge Regression'], ['tr', 'Decision Tree Regressor'], ['fr', 'Random Forest Regressor']]
 
+    score = 0
     for index in range(len(list_of_models)):
         model_code = list_of_models[index][0]
         model, train_score, test_score = model_running(model_code, X_train, X_test, y_train, y_test)
+        if index > 0 and test_score > score:
+            the_model = model
+            the_score = test_score
+        else:
+            the_model = model
+            the_score = test_score
         model_name = list_of_models[index][1]
         list_of_models[index].extend([model, train_score, test_score])
         print(model_name+' Score\nTrain: {0}\nTest: {1}\n'. format(round(train_score.mean(),3), round(test_score.mean(),3)))
         actual_pred_plot(model_name, model_code, model, X_test, y_test, filename)
 
-    # store_model_info('model_and_cols.pkl', county_info_df, rf_model, cols)
-    # store_model_info('../web_app/model_and_cols.pkl', county_info_df, rf_model, cols)
-    # store_model_info('../web_app_0/model_and_cols.pkl', county_info_df, rf_model, cols)
+
+
+    store_model_info('model_and_cols.pkl', county_info_df, the_model, cols)
+    store_model_info('../web_app/model_and_cols.pkl', county_info_df, the_model, cols)
